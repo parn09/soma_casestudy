@@ -44,6 +44,7 @@ score.sentiment = function(sentences, pos.words, neg.words, .progress='none')
 ############################################
 #Chunk - 4 - Scoring Tweets &amp; Adding a column      
 ############################################
+setwd("~/CaseStudy")
 
 #Load sentiment word lists
 hu.liu.pos = scan(paste(getwd(),'/positive-words.txt',sep=""), what='character', comment.char=';')
@@ -64,8 +65,7 @@ DatasetAcer$text<-as.factor(DatasetAcer$text)
 Asus.scores = score.sentiment(DatasetAsus$text, pos.words,neg.words, .progress='text')
 Acer.scores = score.sentiment(DatasetAcer$text, pos.words,neg.words, .progress='text')
 
-#Export scores to csv file, please take note, you need to submit  
-#RangerScore.csv to OLIVE 
+#Export scores to csv file
 path<-getwd()
 write.csv(Asus.scores,file=paste(path,"/AsusScores.csv",sep=""),row.names=TRUE)
 write.csv(Acer.scores,file=paste(path,"/AcerScores.csv",sep=""),row.names=TRUE)
@@ -78,18 +78,18 @@ Acer.scores$Team = 'Acer'
 #############################
 
 hist(Asus.scores$score)
-qplot(Asus.scores$score)
+qplot(Asus.scores$score, binwidth=0.5)
 
 hist(Acer.scores$score)
-qplot(Acer.scores$score)
+qplot(Acer.scores$score, binwidth=0.5)
 
 
 #################################
-#Chunk -6- Comparing 3 data sets	              
+#Chunk -6- Comparing 2 data sets	              
 #################################
 
 all.scores = rbind(Asus.scores, Acer.scores)
 ggplot(data=all.scores) + # ggplot works on data.frames, always
-  geom_bar(mapping=aes(x=score, fill=Team), binwidth=1) +
+  geom_bar(mapping=aes(x=score, fill=Team), binwidth=0.5) +
   facet_grid(Team~.) + # make a separate plot for each hashtag
   theme_bw() + scale_fill_brewer() # plain display, nicer colors
